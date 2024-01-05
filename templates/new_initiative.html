@@ -3,19 +3,19 @@
 {% block main %}
 <br>
 <br>
-<form class="form_register" method="POST">
-    <h1>Создание новой инициативы</h1>
+<form method="POST">
+    <h1 style="position: relative; left: 38vw; width: 30vw;">Создание новой инициативы</h1>
 
     <div style="position: relative; left: -130px; height: 2vw;">
-        <input class='input_register' style='height: 3vw; left: 6px; position: relative;' type="text" name="title" placeholder="Название" value="{{ title or '' }}">
+        <input class='input_register' style='height: 3vw; left: 46vw; position: relative; width: 20vw;' type="text" name="title" placeholder="Название" value="{{ title or '' }}">
     </div>
     <br>
-    <div style="position: relative; left: -118px; height: 2vw">
-        <input class='input_register' style='height: 3vw' type="text" name="text" placeholder="текст" value="{{ text or '' }}">
+    <div style="position: relative; left: -118px; height: 2vw; top: 2vw">
+        <input style='height: 14vw; position: relative; width: 25vw; left: 43vw;' type="text" name="text" placeholder="текст" value="{{ text or '' }}">
     </div>
     <br>
     <br>
-    <button class="button_register" type="submit">Создать</button>
+    <button style="position: relative; left: 48vw; top: 15vw;" type="submit">Создать</button>
     <br>
     <br>
     
@@ -28,6 +28,19 @@
 <br>
 <br>
 </form>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <br>
 <br>
 {% endblock %}
