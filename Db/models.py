@@ -1,4 +1,5 @@
 from . import db
+from sqlalchemy import func
 
 
 class users(db.Model):
@@ -12,5 +13,5 @@ class initiatives(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     title = db.Column(db.String(50), nullable=False)
     text = db.Column(db.Text, nullable=False)
-    creation_date = db.Column(DateTime(timezone=True), server_default=func.now())
-    rating = db.Column()
+    creation_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    rating = db.Column(db.Integer, default=0)

@@ -1,0 +1,61 @@
+body {
+    background-color: rgb(179, 243, 222);
+    color: rgb(16, 12, 12);
+    font-family: arial;
+    margin: 0px;
+}
+
+header {
+    background:rgb(224, 155, 190) ;
+    color: rgb(181, 238, 219);
+    padding: 20px;
+    font-size: 16pt;
+    
+}
+
+header:hover {
+    color: blue;
+    font-size: 20pt;
+    transition: 600ms 1s
+}
+
+header:active {
+    color: rgb(255, 0, 230);
+    font-size: 20pt;
+    transition: 200ms 1s
+}
+
+main {
+    margin: 10px 20px;
+}
+
+footer {
+    background: rgb(224, 155, 190);
+    color: rgb(181, 238, 219);
+    padding: 10px;
+    font-size: 10pt;
+    text-align: right;
+    font-style: italic;
+    position:relative;
+    left:0;
+    bottom:0;
+    right:0;
+}
+
+a {
+    color: rgb(3, 193, 101);
+    text-decoration: none;
+    text-shadow: 1px 1px 10px green;
+    transition: 600ms 1s
+}
+
+img {
+    width:700px;
+    height:700px;
+}
+
+input {
+    height: 2vw;
+    left: 52vw;
+    position: relative;
+}
