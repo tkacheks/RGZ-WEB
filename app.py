@@ -32,18 +32,34 @@ def start():
 
 @app.route("/app/index", methods=['GET', 'POST'])
 def main():
+    username = session.get('username')
     if 'username' not in session:
         return redirect(url_for('registerPage'))
     
+    if request.method == 'POST':
+        initiative_id = request.form.get('initiative_id')
+        vote_type = int(request.form.get('vote_type'))
+
+        user_id = session.get('id')
+        voted_key = f'voted_{user_id}_{initiative_id}'
+        
+        if session.get(voted_key) is None:
+            initiative = initiatives.query.get_or_404(initiative_id)
+            process_vote(initiative, vote_type)
+
     page = int(request.args.get('page', 1))
     per_page = 20
     offset = (page - 1) * per_page
     initiatives_list = initiatives.query.slice(offset, offset + per_page).all()
-    all_users = users.query.all()
 
-    visible_user = session.get('username', 'Anon')
+    # Проверка рейтинга и удаление инициативы, если нужно
+    for initiative in initiatives_list:
+        if initiative.rating <= -10:
+            db.session.delete(initiative)
 
-    return render_template('index.html', name=visible_user, all_users=all_users, initiatives=initiatives_list, current_page=page, per_page=per_page)
+    db.session.commit()
+
+    return render_template('index.html', initiatives=initiatives_list, current_page=page, per_page=per_page, name=username)
 
 
 @app.route('/app/register', methods=['GET', 'POST'])
@@ -160,3 +176,35 @@ def all_initiatives():
 def logout():
     session.clear()
     return redirect(url_for('loginPage'))
+
+
+@app.route('/vote/<int:initiative_id>/<int:vote_type>', methods=['POST'])
+def vote(initiative_id, vote_type):
+    user_id = session.get('id')
+    voted_key = f'voted_{user_id}_{initiative_id}'
+
+    if session.get(voted_key) is None:
+        initiative = initiatives.query.get_or_404(initiative_id)
+
+        if vote_type == 1:
+            initiative.rating += 1
+        elif vote_type == 0:
+            initiative.rating -= 1
+
+        # Сохранение информации о голосе в сессии
+        session[voted_key] = True
+        db.session.commit()
+
+    return redirect(url_for('main', page=request.args.get('page', 1)))
+
+
+@app.route("/app/delete_initiative/<int:initiative_id>", methods=["POST"])
+def delete_initiative(initiative_id):
+    if 'username' not in session or not session['username'] == 'admin':
+        return redirect(url_for('login'))  
+
+    initiative = initiatives.query.get_or_404(initiative_id)
+    db.session.delete(initiative)
+    db.session.commit()
+
+    return redirect(url_for('main'))

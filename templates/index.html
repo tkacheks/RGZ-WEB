@@ -47,6 +47,11 @@
             <a style="color: white" href="/app/register" target="_self">Регистрация</a>
         </button>
         <span style="right: -7vw; position: relative; color:green">{{ name }}</span>
+        {% if session['username'] == 'admin' %}  
+        <div>
+            Вы вошли под правами администратора
+        </div>
+        {% endif %}
 
         <form action="{{ url_for('logout') }}" method="post">
             <button type="submit">Выйти</button>
@@ -61,6 +66,21 @@
                 <h3>{{ initiative.title }}</h3>
                 <p>{{ initiative.text }}</p>
                 <p>Дата создания: {{ initiative.creation_date }}</p>
+                <p>Рейтинг: {{ initiative.rating }}</p>
+                <form method="post" action="{{ url_for('vote', initiative_id=initiative.initiatives_id, vote_type=1) }}">
+                    <input type="hidden" name="page" value="{{ current_page }}">
+                    <button type="submit">ЗА!!!</button>
+                </form>
+                <form method="post" action="{{ url_for('vote', initiative_id=initiative.initiatives_id, vote_type=0) }}">
+                    <input type="hidden" name="page" value="{{ current_page }}">
+                    <button type="submit">ПРОТИВ!!!</button>
+                </form>
+                {% if session['username'] == 'admin' %}
+                <form method="post" action="{{ url_for('delete_initiative', initiative_id=initiative.initiatives_id) }}">
+                    <input type="hidden" name="page" value="{{ current_page }}">
+                    <button type="submit">Delete</button>
+                </form>
+                {% endif %}
             </div>
         {% endfor %}
 
@@ -68,14 +88,6 @@
             <a style="border: 3px solid blueviolet" href="{{ url_for('main', page=current_page + 1) }}" id="load-more-btn">Загрузить еще</a>
         {% endif %}
         <br>
-        {% if session['username'] == 'admin' %}  <!-- Делаем поля дла администратора -->
-        <div>
-            Вы вошли под правами администратора
-            <button>
-                <a href="{{ url_for('createInitiative') }}">Сделать новый сеанс</a>
-            </button>
-        </div>
-        {% endif %}
     </main>
     <br>
     <footer style="position: relative; top: 2vw;">
